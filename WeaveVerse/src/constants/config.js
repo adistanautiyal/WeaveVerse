@@ -20,7 +20,8 @@ export const API_MESSAGES={
 
 //SERVICE_URLS
 const SERVICE_URLS = {
-    UserSignUp: { url: '/signup', method: 'POST' }
+    UserSignUp: { url: '/signup', method: 'POST' },
+    UserLogIn: {url:'/login', method:'POST'},
 };
 
 export default SERVICE_URLS;

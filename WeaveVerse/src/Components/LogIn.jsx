@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext";
 import { API } from "../services/api";
 
 const LogIn = () => {
-  const { Account, toggleAccount, onInputChange, signup, login } = useContext(AuthContext);
+  const { Account, toggleAccount, onInputChange, signup, login ,onValueChange} = useContext(AuthContext);
   
   // Prevent form default submission
   
@@ -20,6 +20,19 @@ const LogIn = () => {
         // Handle the error, show appropriate message
     }
 };
+
+const logInUser=async (event)=>{
+  if (!login.username || !login.password) {
+    alert("All fields are required for login!");
+    return;}
+  try{
+    event.preventDefault();
+  const response=await API.UserLogIn(login);
+  console.log(response);
+  }catch(error){
+    console.error("something went wrong!")
+  }
+}
 
   return (
     <>
@@ -49,14 +62,15 @@ const LogIn = () => {
             </div>
 
             {/* Login Form */}
-            <form >
+            <form onSubmit={logInUser}>
               {/* Username Input */}
               <div className="mb-4">
                 <input
                   type="text"
+                  name="username"
                   placeholder="USERNAME"
                   className="w-full p-3 border border-gray-400 rounded-2xl bg-[#E1DAD2]"
-                  onChange={onInputChange}
+                  onChange={onValueChange}
                 />
               </div>
 
@@ -64,9 +78,10 @@ const LogIn = () => {
               <div className="mb-4">
                 <input
                   type="password"
+                  name="password"
                   placeholder="PASSWORD"
                   className="w-full p-3 border border-gray-400 rounded-2xl bg-[#E1DAD2]"
-                  onChange={onInputChange}
+                  onChange={onValueChange}
                 />
               </div>
 
