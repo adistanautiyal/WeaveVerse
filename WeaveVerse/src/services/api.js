@@ -1,22 +1,28 @@
-const axios= require('axios');
-const {API_MESSAGES}=require('../constants/config.js')
 
+import axios from 'axios';
+import SERVICE_URLS from '../constants/config.js';
+import { API_MESSAGES } from '../constants/config.js';
+
+
+ 
 
 const API_URL="http://localhost:3000";
 const Instance=axios.create({
     baseURL:API_URL,
     timeout:10000,
-    Headers:{
+    headers:{
         "content-type":"application/json"
     }
 });
 
-Instance.interceptors.request.use( function (config){
-    return config;
-},
-function (error){
-    return Promise.reject(error);
-});
+Instance.interceptors.request.use(
+    (config) => {
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 
 Instance.interceptors.response.use(
@@ -24,7 +30,7 @@ Instance.interceptors.response.use(
         return processedResponse(response);
     },
     function(error){
-        return processedErrors(response);
+        return processedErrors(error);
     }
 
 );
@@ -64,4 +70,27 @@ const processedErrors=(error)=>{
 };
 
 //actual api
+const API = {};
 
+for (const [key, value] of Object.entries(SERVICE_URLS)) {
+    API[key] = async (body) => {
+        console.log(`Making ${value.method} request to ${value.url} with data:`, body);
+        try {
+            const response = await Instance({
+                method: value.method,
+                url: value.url,
+                data: body,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Response:', response);
+            return response;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    };
+}
+
+export {API};

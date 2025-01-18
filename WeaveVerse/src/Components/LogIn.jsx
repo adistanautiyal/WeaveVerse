@@ -2,23 +2,24 @@ import React, { useContext, useState } from "react";
 import LoginPage from "../assets/LoginPage.png";
 import SigninPage from "../assets/SigninPage.png";
 import AuthContext from "../context/AuthContext";
+import { API } from "../services/api";
 
 const LogIn = () => {
   const { Account, toggleAccount, onInputChange, signup, login } = useContext(AuthContext);
   
   // Prevent form default submission
-  const handleFormSubmit = (event) => {
-    event.preventDefault(); // Prevents page reload
-
-    // Check if it's a login or signup form and call the respective function
-    if (Account === "login") {
-      login(); // Call the login function (You need to implement this)
-    } else {
-      signup(); // Call the signup function (You need to implement this)
+  
+  const signUpUser = async (event) => {
+    try {
+      event.preventDefault();
+        const response = await API.UserSignUp(signup); // Ensure 'signup' contains all necessary data
+        console.log(response);
+        // Handle the response based on success/failure
+    } catch (error) {
+        console.error('Error during sign-up:', error);
+        // Handle the error, show appropriate message
     }
-  };
-
-  const signUpUser=()=>{};
+};
 
   return (
     <>
@@ -48,7 +49,7 @@ const LogIn = () => {
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleFormSubmit}>
+            <form >
               {/* Username Input */}
               <div className="mb-4">
                 <input
@@ -128,12 +129,12 @@ const LogIn = () => {
             </div>
 
             {/* Sign-Up Form */}
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={signUpUser}> 
               {/* Username Input */}
               <div className="mb-4">
                 <input
                   type="text"
-                  name="name"
+                  name="username"
                   placeholder="USERNAME"
                   className="w-full p-3 border border-gray-400 rounded-2xl bg-[#E1DAD2]"
                   onChange={onInputChange}
@@ -166,7 +167,7 @@ const LogIn = () => {
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  onClick={()=>signUpUser()}
+                  
                   className="w-1/2 py-2 bg-[#536e39] text-white rounded-2xl hover:bg-[#89A073] transition-all text-lg"
                 >
                   Sign Up
