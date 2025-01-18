@@ -5,34 +5,57 @@ import AuthContext from "../context/AuthContext";
 import { API } from "../services/api";
 
 const LogIn = () => {
-  const { Account, toggleAccount, onInputChange, signup, login ,onValueChange} = useContext(AuthContext);
-  
+  const {
+    Account,
+    toggleAccount,
+    onInputChange,
+    signup,
+    login,
+    onValueChange,
+    setUser,
+  } = useContext(AuthContext);
+
   // Prevent form default submission
-  
+
   const signUpUser = async (event) => {
     try {
       event.preventDefault();
-        const response = await API.UserSignUp(signup); // Ensure 'signup' contains all necessary data
-        console.log(response);
-        // Handle the response based on success/failure
+      const response = await API.UserSignUp(signup); // Ensure 'signup' contains all necessary data
+      console.log(response);
+      // Handle the response based on success/failure
     } catch (error) {
-        console.error('Error during sign-up:', error);
-        // Handle the error, show appropriate message
+      console.error("Error during sign-up:", error);
+      // Handle the error, show appropriate message
     }
-};
+  };
 
-const logInUser=async (event)=>{
-  if (!login.username || !login.password) {
-    alert("All fields are required for login!");
-    return;}
-  try{
-    event.preventDefault();
-  const response=await API.UserLogIn(login);
-  console.log(response);
-  }catch(error){
-    console.error("something went wrong!")
-  }
-}
+  const logInUser = async (event) => {
+    if (!login.username || !login.password) {
+      alert("All fields are required for login!");
+      return;
+    }
+    try {
+      event.preventDefault();
+      const response = await API.UserLogIn(login);
+
+      //session storage
+      sessionStorage.setItem(
+        "accessToken",
+        `Bearer ${response.data.accessToken}`
+      );
+      sessionStorage.setItem(
+        "refreshToken",
+        `Bearer ${response.data.refreshToken}`
+      );
+
+      //set user for context
+      setUser({username:response.data.username,email:response.data.email});
+
+      console.log(response);
+    } catch (error) {
+      console.error("something went wrong!");
+    }
+  };
 
   return (
     <>
@@ -144,7 +167,7 @@ const logInUser=async (event)=>{
             </div>
 
             {/* Sign-Up Form */}
-            <form onSubmit={signUpUser}> 
+            <form onSubmit={signUpUser}>
               {/* Username Input */}
               <div className="mb-4">
                 <input
@@ -182,7 +205,6 @@ const logInUser=async (event)=>{
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  
                   className="w-1/2 py-2 bg-[#536e39] text-white rounded-2xl hover:bg-[#89A073] transition-all text-lg"
                 >
                   Sign Up
