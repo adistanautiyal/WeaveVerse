@@ -18,6 +18,8 @@ const LogIn = () => {
     }
   };
 
+  const signUpUser=()=>{};
+
   return (
     <>
       {Account === "login" ? (
@@ -164,6 +166,7 @@ const LogIn = () => {
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
+                  onClick={()=>signUpUser()}
                   className="w-1/2 py-2 bg-[#536e39] text-white rounded-2xl hover:bg-[#89A073] transition-all text-lg"
                 >
                   Sign Up

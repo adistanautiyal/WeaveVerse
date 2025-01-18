@@ -1,18 +1,13 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const connection=require("./database/db.js")
+const dotenv = require('dotenv');
 
-const app= express();
+dotenv.config();
 
-main().then((req,res)=>{
-    console.log("database connected");
 
-}).catch(err => console.log(err));
+const app = express();
+app.use(express.json());
 
-async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/blog');
-
-  
-}
 
 app.get("/",(req ,res)=>{
     res.send("home");
@@ -21,3 +16,8 @@ app.get("/",(req ,res)=>{
 app.listen(3000,()=>{
     console.log("server working");
 });
+
+const USERNAME=process.env.DB_USERNAME;
+const PASSWORD=process.env.DB_PASSWORD;
+
+connection(USERNAME,PASSWORD);
