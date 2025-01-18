@@ -4,7 +4,8 @@ import SigninPage from "../assets/SigninPage.png";
 import AuthContext from "../context/AuthContext";
 import { API } from "../services/api";
 
-const LogIn = () => {
+
+const LogIn = ({setshowLogIn}) => {
   const {
     Account,
     toggleAccount,
@@ -22,6 +23,7 @@ const LogIn = () => {
       event.preventDefault();
       const response = await API.UserSignUp(signup); // Ensure 'signup' contains all necessary data
       console.log(response);
+      setshowLogIn(false);  
       // Handle the response based on success/failure
     } catch (error) {
       console.error("Error during sign-up:", error);
@@ -50,6 +52,7 @@ const LogIn = () => {
 
       //set user for context
       setUser({username:response.data.username,email:response.data.email});
+      setshowLogIn(false);
 
       console.log(response);
     } catch (error) {
@@ -66,9 +69,11 @@ const LogIn = () => {
             style={{ backgroundColor: "#E1DAD2" }}
           >
             {/* Close Button */}
-            <button className="absolute top-0 right-2 text-xl font-bold text-gray-600">
+            <button
+            onClick={()=>setshowLogIn(false)} 
+            className="absolute top-0 right-2 text-xl font-bold text-gray-600">
               &times;
-            </button>
+            </button> 
 
             {/* Login Header */}
             <h2 className="text-2xl font-semibold text-gray-700 text-center mb-4">
@@ -148,7 +153,9 @@ const LogIn = () => {
             style={{ backgroundColor: "#E1DAD2" }}
           >
             {/* Close Button */}
-            <button className="absolute top-0 right-2 text-xl font-bold text-gray-600">
+            <button
+            onClick={()=>setshowLogIn(false)} 
+             className="absolute top-0 right-2 text-xl font-bold text-gray-600">
               &times;
             </button>
 
