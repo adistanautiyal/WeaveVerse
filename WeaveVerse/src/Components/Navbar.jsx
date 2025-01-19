@@ -1,43 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [showLogIn, setShowLogIn] = useState(false);
+
+  const handleProtectedNav = (path) => {
+    const isAuthenticated = sessionStorage.getItem("accessToken");
+    if (!isAuthenticated) {
+      setShowLogIn(true);
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
-    <nav className="flex justify-center mt-16">
-      <ul className="flex space-x  ">
-        <li>
-          <a
-            href="#story"
-            className="px-6 py-4 rounded-tl-2xl rounded-bl-2xl bg-[#B7BAA5] border border-[#000000] border-r-[#ffffff] text-blackhover:bg-[#AEB48D] transition-all"
-          >
-            Our story
-          </a>
-        </li>
-        <li>
-          <a
-            href="#write"
-            className="px-6 py-4  bg-[#B7BAA5] text-black border border-[#000000] border-r-[#ffffff] border-l-[#ffffff] hover:bg-[#AEB48D] transition-all"
-          >
-            Write
-          </a>
-        </li>
-        <li>
-          <a
-            href="#contact"
-            className="px-6 py-4  bg-[#B7BAA5] text-black border border-[#000000] border-r-[#ffffff] border-l-[#ffffff] hover:bg-[#AEB48D] transition-all"
-          >
-            Contact us
-          </a>
-        </li>
-        <li>
-          <a
-            href="#get-started"
-            className="px-6 py-4 rounded-tr-2xl rounded-br-2xl border border-[#000000] border-l-[#ffffff] bg-[#B7BAA5] text-black hover:bg-[#AEB48D] transition-all"
-          >
-            Get started
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <>
+      <nav className="flex justify-center mt-8">
+        <ul className="flex divide-x divide-[#000000] border border-[#000000] rounded-full overflow-hidden">
+          {/* Use Link for navigation */}
+          <li>
+            <Link
+              to="/story"
+              className="px-6 py-4 bg-[#B7BAA5] text-black hover:bg-[#AEB48D] transition-all block"
+            >
+              Our story
+            </Link>
+          </li>
+          <li>
+            <button
+              onClick={() => handleProtectedNav("/write")}
+              className="px-6 py-4 bg-[#B7BAA5] text-black hover:bg-[#AEB48D] transition-all block"
+            >
+              Write
+            </button>
+          </li>
+          <li>
+            <Link
+              to="/contact"
+              className="px-6 py-4 bg-[#B7BAA5] text-black hover:bg-[#AEB48D] transition-all block"
+            >
+              Contact us
+            </Link>
+          </li>
+          <li>
+            <button
+              onClick={() => handleProtectedNav("/get-started")}
+              className="px-6 py-4 bg-[#B7BAA5] text-black hover:bg-[#AEB48D] transition-all block"
+            >
+              Get started
+            </button>
+          </li>
+        </ul>
+      </nav>
+      {showLogIn && <LogIn setShowLogIn={setShowLogIn} />}
+    </>
   );
 };
 

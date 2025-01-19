@@ -5,13 +5,20 @@ import Footer from "../Components/Footer";
 import HomeImage from "../assets/HomeImage.png";
 import logo from "../assets/logo.png";
 import LogIn from "../Components/LogIn";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-  const [showLogIn , setshowLogIn]=useState(false);
+  const [showLogIn, setShowLogIn] = useState(false);
+  const navigate = useNavigate();
 
-  const handleStartReadingClick=()=>{
-    setshowLogIn(true);
-  }
+  const handleStartReadingClick = () => {
+    const isAuthenticated = sessionStorage.getItem('accessToken');
+    if (!isAuthenticated) {
+      setShowLogIn(true);
+    } else {
+      navigate('/start-reading');
+    }
+  };
   return (
     <div className="bg-[#E1DAD2] min-h-screen flex flex-col"> {/* Use flex layout and ensure full height */}
     <img
@@ -41,9 +48,10 @@ const LandingPage = () => {
           className="absolute bottom-0 right-2 w-404 h-339 object-contain"
         />
 
-       <StartButton  onClick={handleStartReadingClick} />
+<StartButton onClick={handleStartReadingClick} />
       </main>
       <Footer />
+      {showLogIn && <LogIn setShowLogIn={setShowLogIn} />}
     </div>
   );
 };
